@@ -9,19 +9,19 @@
 
 * Talk about your preferred development/administration environment, (OS, Editor, Browsers, Tools, etc.)
     
-        After years on Windows, Debian and MacOS, right now my preferred OS is Fedora, because is more reliable, secure, with a big company behind. 
-        Editor: VSC, is so great because all the community extensions and AddOns.
-        Browsers: Firefox and Brave browser, for personal browsing and google chrome for work related tabs choosing that for compatibility when browsing the web (chromium web engine).
+        After years of using Windows, Linux, and MacOS, my preferred operating system is Fedora, because it's more reliable, secure, and backed by a great company.
+        Editor: VSC, it's great because all the extensions and plugins from the community.
+        Browsers: Firefox and Brave browser, for personal browsing, and Google Chrome for work-related tabs, choosing that for compatibility when browsing the web (chrome web engine).
         Tools: fail2ban, grsync, htop, ohmyzsh, KVM
 
 * Tell me about the las major Linux Project you finished.
 
-        Automate and customize the install process of the hypervisor type 1 based on Debian called proxmox VE. KVM PCI passthrough, network link aggregation, update LXC template, swap memory, cluster, backups, etc.
+        Automate the installation process of the Type 1 hypervisor (Debian-based) called proxmox VE. With PCI KVM pass-through, network link aggregation, LXC template update, swap memory, cluster, backups, etc.
 
 
 * Tell me about the biggest mistake you've made in [some recent time period] and how you would do it differently today. What did you learn from this experience? 
         
-        Haven't use GIT and LINT(shellcheck) for scripting before, instead of trying to keep up with your notion notes all the time.
+        Haven't used GIT and LINT (shellcheck) for scripting before. It is much more functional than taking notes in the cloud.
 
 
 * Why we must choose you?
@@ -114,6 +114,7 @@
 
 * How to connect to a remote server or what is SSH?
 
+        SSH, also known as Secure Shell or Secure Socket shell, is a cryptographic network protocol that gives users (administrators) a secure way to access over an unsecured network.
         ``` ssh username@servername_or_ip ```
 
 * How to get all environment variables and how can you use them?
@@ -363,7 +364,7 @@
         - 5 - Multi-user mode, with networking and GUI.
         - 6 - Reboot. The server will restart at this runlevel.
 
-        To get the current (and previous) runlevel, jut run the ``` runlevel ``` command.
+        To get the current (and previous) runlevel, just run the ``` runlevel ``` command.
 
 * What is SSH port forwarding?
 
@@ -564,71 +565,139 @@
 
 * What is a tunnel and how you can bypass a http proxy?
 
+        HTTP tunneling is used to create a network link between two computers  in conditions of restricted network connectivity including firewalls, NATs and ACLs, among other restrictions. The tunnel is created by an intermediary called a proxy server which is usually located in a DMZ.
+
+        You can't bypass a proxy if it is configured correctly. You can get around a proxy, but it requires significant work and a external server. 
+        Ways are using ssh-tunneling over https, or a VPN also simulating https connections. 
+
 
 * What is the difference between IDS and IPS?
 
+        IDS (Intrusion Detection Systems) and IPS (Intrusion Prevention Systems) go hand in hand when it comes to network integrity of organizations.
+        The main thing that differentiates IDS from IPS is that IDS is for monitoring networks while IPS is all about control systems.
 
-* What shorcuts do you use on a regular basis?
+
+* What shortcuts do you use on a regular basis?
+
+        TAB is my ultimate friend for autocomplete. Ctrl+C for interrupt and abort. Ctrl+L is the equivalent to clear console. Ctrl+A move the cursor to the beginning of the line. Ctrl+E moves the cursor to the end of the line. Ctrl+R back search. Ctrl+/ undo. Ctrl+W: delete last word of command & close current tab.
 
 
 * What is the Linux Standard Base?
 
+        The Linux Standard Base (LSB) was a joint project by several Linux distributions under the organizational structure of the Linux foundation to standardize the software system structure, including the Filesystem Hierarchy standard used in the Linux Kernel.
+
 
 * What is an atomic operation?
+
+        Atomic operations provide instructions which complete oin one instruction cycle. Since atomic instructions complete in one single instruction cycle, they are not interrupted by other CPUs trying to access the same memory location. This prevents race conditions.
+        Linux provides two types of atomic operations - 
+          - Atomic operations on integer variables
+          - atomic operation that operate on individual bits
 
 
 * Your freshly configured http server is not running after a restart, what can you do?
 
-        check the status, and start the service, check logs, and enable the service to start at startup boot
+        Make sure the service ir running. 
+        ```sudo systemctl restart apache2``` or ```httpd``` for Redhat environments.
+        Check your server configuration.
+        ```sudo apache2ctl -t``` or ```httpd -t```
+        Check logs
+        ```sudo ls /var/log/apache2/``` or ```/httpd/```
+        Check other services, databases, firewall, network connections, or file permissions.
+        
 
 * What kind of keys are in ~/.ssh/authorized_keys and what it is this file used for?
 
-        autorized keys to connect to different hosts
+        This file containers a list of public keys, one-per-line, that are authorized to login into this account.
+        This file is used to authenticate using SSH keys. A user must have an SSH key pair on their local computer. On the remote server, the public key must be copied to a file within the user's home directory at ```~/.ssh/authorized_keys```
 
 * I've added my public ssh key into authorized_keys but I'm still getting a password prompt, what can be wrong?
 
-        you need to disable password access on the server
+        A couple of things to look around...
+        - open configuration tile ```/etc/ssh/ssh_config```
+        - look for ```PreferredAuthentications```
+        - make sure ```password``` comes after ```publickey``` 
+          - ```PublickeyAuthentication``` should be set to YES.
+        - make sure to configure the right permissions on ```~/.ssh/``` 
 
 * Did you ever create RPM's, DEB's or solaris pkg's?
 
+        Yes, I have compiled projects which I download from Github. No own project so far
 
 * What does ```:(){ :|:& };:``` do on your system?
 
+        The ```:(){ :|:& };:``` is nothing but a bash function. This function get executed recursively. It is often used by sysadmin to test user process limitations on server. Linux process limits can be configured via ```/etc/security/limits.conf``` and PAM to avoid bash fork() bomb.
+        The fork bomb is a form of denial-of-service (DoS) attack against a Linux or Unix-based system. Once a successful fork bomb has been activated in a system it may not be possible to resume normal operation without rebooting the system as the only solution to a fork bomb is to destroy all instances of it.
 
 * How do you catch a Linux signal on a script?
 
+        With a built-in bash command ```trap [action] [signal]``` that is used to execute a command when the shell receives any signal. For example, the most common signal of bash is SIGINT (signal interrupt). 
 
 * Can you catch a SIGKILL?
 
+        You cannot, at least not for the process being killed.
 
-* What's happening when the Linux kernel is staring the OOM killer and how does it choose which process to kill first?
+* What's happening when the Linux kernel is starting the OOM killer and how does it choose which process to kill first?
 
-* Describe the linux boot process with as much detail as possible, staring from when the system is powered on and ending when you get a prompt.
+        If memory is exhaustively used up by processes, to the extent which can possibly threaten the stability of the system, then the OOM killer comes into the picture. The OOM killer has to select the best process to kill. Best here refers to a process which will free up the maximum memory upon killing and is also the least important to the system.
 
-        start with the check any hardware changes on the system on the BIOS, initiate the boot order, start the boot partition of the linux, etc
+* Describe the linux boot process with as much detail as possible, starting from when the system is powered on and ending when you get a prompt.
+
+        The following are the 6 high level stages of a typical Linux boot process:
+        1. BIOS: Basic input/output system executes MBR
+        2. MBR: Master Boot Record, executes GRUB
+        3. GRUB: Grand Unified Bootloader executes Kernel
+        4. Kernel: Kernel executes /sbin/init
+        5. Init: Init executes runlevel programs
+        6. Runlevel: Runlevel programs are executed from /etc/rc.d/rc*.d/
 
 * What's a chroot jail?
 
+        A chroot (short for change root) is a Unix operation that change the apparent root directory to one specified by the user.It allows you to run a program (process) with a root directory other than /. The program cannot see or access files outside the designated directory tree.
 
 * When trying to unmount a directory it says it's busy, how to find out which PID holds the directory?
 
+        Use ``` lsof | grep /media/busymediahere ```to find out what is using the mount.
 
 * What's LD_PRELOAD and when it's used?
 
+        If you set LD_PRELOAD to the path of a shared object, that file will be loaded before any other library (including the C runtime). 
 
 * You ran a binary and nothing happened. How would you debug this?
 
+        There is a set of tools which would be using to debugging the binaries.
+        - ```file```: Help to determine the file type.
+        - ```ldd```: Print shared object dependencies.
+        - ```ltrace```: A library call tracer.
+        - ```hexdump```: Display file contents in ASCII, decimal, hexadecimal or octal.
+        - ```strings```: print the strings of printable characters in files.
 
 * What are cgroups? can you specify a scenario where you could use them?
-* How can you remove/delete a file with file-name consisting of only non-printable/non-type-able-characters?
+
+        A control group (cgroup)  is a Linux kernel feature that limits, accounts for, and isolates the resource (CPU, memory, disk I/O, network and so on) of a collection of processes. So basically you use cgroups to control how much of a given key resource (CPU, memory, network and disk) can be accessed or used by a process or set of processes.
+
+* How can you remove/delete a file with file-name consisting of only non-printable/non-typeable-characters?
+
+        First ensure that the name is right with: ```ls -ld $'\177```', if it shows the right file, then use rm: ```rm $'\177'```
+        Another approach is to use ```rm -i -- *``` . With the -i option requires confirmation before removing a file, so you can skip all files you want to keep.
+
 * How can you increase or decrease the priority of a process in Linux?
+
+
+        You can change the priority of a running process to a value lower or higher than the base scheduling priority by using the ```nice``` command from the terminal.
 
 
 ### Expert Linux Questions:
 
 * A running process gets ```EAGAIN: Resource temporarily unavailable``` on reading a socket. How can you close this bad socket/file descriptor without killing the process?
-* What do you control with swapiness?
+* What do you control with swappiness?
+
+        Swappiness is the kernel parameter that defines how much (and how often) your Linux kernel will copy RAM contents to swap. This parameter's default value is "60" and it can take anything from "0" to "100". The higher value of the swappiness parameter, the more aggressively you kernel will swap.
+
 * How do you change TCP stack buffers? How do you calculate it?
+
+        
+
 * What is Huge Tables? Why isn't enabled by default? Why and when use it?
 * What is LUKS? How to use it?
 
