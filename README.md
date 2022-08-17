@@ -696,28 +696,101 @@
 
 * How do you change TCP stack buffers? How do you calculate it?
 
-        
+        TCP memory is calculated automatically based on system memory; you can find the actual values by typing the following command:
+        ```cat /proc/sys/net/ipv4/tcp_mem```
+        You can set the values editing the parameter ```rmem_max``` and ```wmem_max``` file ```/etc/sysctl.conf```.
+        You can calculate the correct receive buffer size to use by estimating the bandwidth delay product (BDP). To calculate BDP, multiply the available bandwidth by the value of the connection latency.
 
-* What is Huge Tables? Why isn't enabled by default? Why and when use it?
+* What is Huge page? Why isn't enabled by default? Why and when use it?
+
+        Huge pages are helpful in virtual memory management in the Linux system. They help is managing huge size pages in memory in addition to standard 4KB page size. You can define as huge as 1GB page size using huge pages.
+        You should only use huge pages if the workload you are performing will use the space in the huge pages. Otherwise you will end up with severely fragmented memory. 
+
 * What is LUKS? How to use it?
+
+        LUKS (Linux Unified Key Setup) is the standard for Linux hard disk encryption.
+          - You install the cryptsetup-luks package.
+          - Configure the LUKS partition
+          - Format the partition
+          - And mount it
+
 
 
 ### Networking Questions:
 
 * What is localhost and why would ```ping localhost``` fail?
+
+        The localhost refers to the current computer used to access it. It is used to access the network services that are running on the host via the loopback network interface. Using the loopback interface bypasses any local network interface hardware.
+        Ping localhost fail? Not proper configuration on interface or firewall rules. 
+        
+
 * What is the similarity between "ping" & traceroute" ?  how is traceroute able to find the hops.
+
+        Ping and traceroute both are primarily used to test the network connectivity issues. Ping does the same with a direct approach to the host or IP while traceroute approaches the host or IP gathering information at each node it passes through.
+        If there is no successful reply from the destination while using the ping command, the tracert command is used to spot where the data packets failed along its way.
+        Traceroute uses the TTL (time to Live) field in the IP packet header.
+
 * What is the command used to show all open ports and/or socket connections on a machine?
+
+        To list all currently running ports including TCP and UDP in Linux, we use "netstat -lntu", "ss -tulpn" or "lsof -i -P -n".
+
 * Is 300.168.0.123 a valid IPv4 address?
+
+        No, octet can't be more than 255
+
 * Which IP ranges/subnets are "private" or "non-routable" (RFC 1918)?
+
+        - 10.0.0.0/8 IP address: 10.0.0.0 -> 10.255.255.255
+        - 172.16.0.0/12 IP addresses: 172.16.0.0 -> 172.31.255.255
+        - 192.168.0.0/16 IP addresses: 192.168.0.0 -> 192.168.255.255
+
 * What is a VLAN?
+
+        A logical sub network that groups a collection of devices from different physical LANs.
+
 * What is ARP and what is it used for?
+
+        ARP stands for Address Resolution Protocol. The primary function of this protocol is to resolve the IP address of a system to its mac address.
+        ```arp -a``` print the current content of the ARP table.
+
 * What is the difference between TCP and UDP??
+
+        - TCP is reliable as it guarantees delivery of data to the destination router. (slower)
+        - The delivery of data to the destination cannot be guaranteed in UDF (faster)
+
 * What is the purpose of a default gateway?
+
+        A default gateway is the node in a computer network using the internet protocol suite that serves as the forwarding host (router) to other networks when no other route specification matches the destination IP address of a packet.
+
 * What is command used to show the routing table on a Linux box?
+
+        - ```ip route ```
+        - ```netstat -r```
+        - ```route -n```
+
 * A TCP connection on a network can be uniquely defined by 4 things. What are those things?
+
+        - remote-ip-address
+        - remote-port
+        - source-ip-address
+        - source-port
+
 * When a client running a web browser connects to a web server, what is the source port and what is the destination port of the connection?
+
+        - source port - depends on browser
+        - destination port - 80 or 443
+
 * How do you add an IPv6 address to a specific interface?
+
+        same commands as for IPv4: 
+        ```ip -6 addr add <ipv6address>/<prefixlength> dev <interface>```
+        ```ip -6 addr add 3ffe:ffff:0:f101::1/64 dev eth0```
+        ```ifconfig eth0 inet6 add 3ffe:ffff:0:f101::1/64```
+
 * You have added an IPv4 and IPv6 address to interface eth0. A ping to the v4 address is working but a ping to the v6 address give you the response ``` sendmdg: operation not permitted ```. What could be wrong?
+
+        firewall blocks traffic ipv6
+
 * What is SNAT and when should it be used?
 * Explain how could you ssh login into a Linux system that DROPs all new incoming packets using a SSH tunnel.
 * How do you stop a DDoS attack?
