@@ -792,76 +792,301 @@
         firewall blocks traffic ipv6
 
 * What is SNAT and when should it be used?
+
+        SNAT (Source Network Address Translation) changes the private IP address of the source host to public IP address. It may also change the source port in the TCP/UDP headers. SNAT is typically used by internal users to access the internet.
+
 * Explain how could you ssh login into a Linux system that DROPs all new incoming packets using a SSH tunnel.
+
+        Reverse SSH tunneling allows you to use that established connection to set up a new connection from you local computer back to the remote computer.
+
 * How do you stop a DDoS attack?
+
+        In Linux context we can use fail2ban, firewall, check multiple connections and http headers and other
+
 * How can you see content of an ip packet?
+
+        - tcpdump
+        - wireshark
+
 * What is IPoAC (RFC 1149)?
+
+        It's a joke (IP over Avian Carriers)
+
 * What will happen when you bind port 0?
+
+        Bind TCP on port 0 indicates a request to dynamically generate an unused port number(zero - means select any available local port)
+
 
 
 ### MySQL Questions:
 
 * How do you create a user?
+
+        ```CREATE USER 'username'@'localhost' IDENTIFIED BY 'password';```
+
 * How do you provide privileges to a user?
+
+        ```GRANT ALL PRIVILEGES ON db_name.* to 'username'@'localhost';```
+
 * What is the difference between a "left" and a "right" join?
+
+        The LEFT JOIN allows you to query data from two or more tables. Similar to the INNER JOIN clause, the LEFT JOIN is an optimal clause of the SELECT statement, which appears immediately after the FROM CLAUSE.
+        RIGHT JOIN is similar to LEFT JOIN, except that the treatment of the joined tables is reversed.
+
 * Explain briefly the differences between InnoDB and MyISAM.
+
+        - InnoDB has row-level locking, MyISAM can only do full table-level locking.
+        - InnoDB has better crash recovery.
+        - MyISAM has ```FULLTEXT``` search indexes, InnoDB did not until MySQL 5.6 (2013)
+        - InnoDB implements transactions, foreign keys and relationship contraints, MyISAM does not.
+
 * Describe briefly the steps you need to follow in order to create a simple master/slave cluster.
+
+        1. Setting up the master
+        2. Create a new user for slave
+        3. Move data from master to slave
+        4. Configure slave server
+        5. Import data dump
+        6. Start slave server
+        7. Test master-slave replication
+
+
 * Why should you run "mysql_secure_installation" after installing MySQL?
+
+        To improve the security of your DB installation:
+        - You can set a password for root accounts.
+        - You can remove root accounts that are accessible from outside the local host.
+        - You can remove anonymous-user accounts.
+        - You can remove the test database, which by default can be accessed by anonymous users.
+
 * How do you check which jobs are running?
+
+        ```SHOW FULL PROCESSLIST;```
+
 * How would you take a backup of MySQL database?
 
-
+        ```myusqldump -u username -p --all-databases | gzip > file.sql.gz```
 
 ### DevOps Questions:
 
-* Can you decribe your workflow when you create a script?
+* Can you describe your workflow when you create a script?
+
+        - set a goal
+        - check 
+        - design
+        - check
+        - coding
+        - check
+        - repeat
+
 * What is GIT?
+
+        GIT is free and opensource software for distributed version control, tracking changes in any set of files, usually used for coordinating work among programmers collaboratively developing source code during the sofware development.
+
 * What is a dynamically/statically linked file?
+
+        Statically linked files are 'locked' to the executable at link time so they never change. A dynamically linked file referenced by an executable can change just by replacing the file on the disk.
+
 * What does "./configure && make && make install" do?
+
+        The process of configure in the first step spits out a custom Makefile specific to your machine. Make install puts the built application and libraries in the correct location so that you can run the application.
+
 * What is puppet/chef/ansible used for?
+
+        Are considered to be configuration management (CM) tools and were created to instal and manage software on existing server instances (like, installation of packages, starting of services, installing scripts or config files on the instance).  They do the heavy lifting of making one or many instances perform their roles without the user needing to specify the exact commands. No more manual configuration or ad-hoc scripts are needed.
+
 * What is Nagios/Zenoss?NewRelic used for?
+
+        Complete monitoring, performance data retention and alerting for servers, switches, applications, and services. 
+
 * What is Jenkins/TeamCity/GoCI used for?
+
+        They are tools that allow developers to integrate code branches during the development process and run a series of automated test against them. It helps to automate the parts of software development related to building, testing, and deploying, facilitating continuous integration and continuous delivery.
+
 * What is the difference between Containers and VMs?
+
+        In traditional virtualization a hypervisor virtualizes physical hardware.
+        Containers only contains the application and its libraries and dependencies. Are small, fast and portable, because containers do not need to include a guest OS in every instance and can , instead, simply leverage the features and resources of the host OS.
+
 * How do you create a new postgres user?
+
+        Using the client utility:
+        ```sudo -u postgres createuser <name>```
+
+        Or using PSQL:
+        ```sudo -u postgres psql```
+        ```CREATE USER <name>
+
 * What is a virtual IP address? What is a cluster?
+
+        A virtual IP address (VIP or VIPA) is an IP address that does not correspond to a physical network interface.
+        A cluster is a set of computers that work together so that they can be viewed as a single system.
+
 * How do you print all strings of printable characters present in a file?
+
+        ```strings option filename```
+
 * How do you find shared library dependencies?
+
+        ``` ldd package_name ```
+
 * What is Automake and Autoconf?
+
+        They are packages for making your software more portable and simplify building it.
+
 * ./configure shows an error that libfoobar is missing on you system, how could you fix this, what could be wrong?
 * What are the advantages/disadvantages of script vs compiled program?
+
+        compiled languages are executed by the operating system, while scripting languages are executed by the CPU. Scripting languages are interpreted and executed line by line when a script is run, while compiled languages need to be converted into executable code.
+
 * What's the relationship between continuous delivery and DevOps?
+
+        Continuous delivery is the method that promotes the adoption of an automated deployment pipeline to realse software reliably and quickly into production. DevOps is about the culture. About creating better collaboration between development and operations. About building a well-defined processes.
+
 * What are the important aspects of a system continuous integration and deployment?
+
+        Automation/testing are the important aspects of a great development workflow. Every task that can be done by a machine should be. Automation give you the time to focus.
+
+
 * How would you enable network file sharing within AWS that would allow EC2 instances in multiple availability zones to share data?
 
 
 ### Fun Questions:
 
 * A careless sysadmin executes the following command: ``` chmod 444 /bin/chmod ``` - what do you do to fix this?
+
+        Method 1
+        ```
+        sudo install -m 0755 /bin/chmod /bin/chmod.fix
+        sudo mv /bin/chmod /bin/chmod.bad
+        sudo mv /bin/chmod.fix /bin/chmod
+        ```
+        Method 2
+        Default permissions is 755.
+        You can use python or any other language to fix this
+        ```
+        #!/usr/bin/python
+        import os
+        os.chmod("/bin/chmod", 0755)
+        ```
+
 * I've lost my root password, what can i do?
+
+        You can boot in single mode and change it.
+        change in grub -> init=/bin/bash -> boot -> run $mount -o remount,rw / -> change root password with: passwd root
+
 * I've rebooted a remote server but after 10 minutes I'm still not able to ssh into it, what can be wrong?
+
+        if it does not ping, maybe probable with network/firewall problem.
+        if you have pings but you can't connect maybe a problem with ssh config or firewall rules
+        bad permissions for ssh keys
+        bad password
+
 * If you were stuck on a desert island with only 5 command-line utilities, which would you choose?
+
+        ```echo: HELP!!```
+        ```dd && ssh``` to pipe myself home
+
 * You come across a random computer and it appears to be a command console for the universe. What is the first thing you type?
+
+        change user "mylogin" expiration from xxxx to never
+        usermod -e "" mylogin
+
 * Tell me about a creative way that you've used SSH?
+
+        remote wireshark
+        ssh user@host 'sudo tcpdump -i eth0 host <ip> and no port 22' | wireshark-
+
 * You have deleted by error a running script, what could you do to restore it?
+
+        Whenever we delete something from our linux system, it does not actually get deleted, till that space gets overwritten by something else in the disk.
+        - lsof command
+        - foremost (forensics tool)
+        While scrip t is running it is not deleted
+        find pid of running script and restore it from procfs
+
 * What will happen on 19 January 2038?
+
+        The counter will then begin to count from the negative scale, once this date come to pass, causing the computers to reset to December 13th 1901, leading to all kinds of errors in every modern 32-bit  computer
+
 * How to reboot server when reboot command is not responding?
+
+
+        shutdown -r
+        init 7
 
 
 ### Demo Time:
 
 * Unpack test.tar.gz without man pages or google.
+
+        tar xzvf test.tar.gz
+
 * Remove all "*.pyc" files from test dir recursively?
+
+        find ./testdir -type f -name "*.pyc" -ls -delete
+
 * Search for "my konfu is the best" in all *.py files.
+
+        find ./testdir -type f -name "*.py" | xargs grep "my konfu is the best"
+
 * Replace the occurrence of "my konfu is the best" with "I'm a linux jedi master" in all *.txt files.
+
+        find ./testdir -type f -name "*.txt" |xargs sed -i "s/my konfu is the best/I\'m a linux jedi master/"
+
 * Test if port 443 on a machine with IP address X.X.X.X is reachable.
+
+        nc -v x.x.x.x 443
+
 * Get http://myinternal.webserver.local/test.html via telnet.
+
+        telnet myinternal.webserver.local 80
+        GET /test.html HTTP/1.1
+
 * How to send an email without a mail client, just on the command line?
+
+        1. using "sendmail" command: ```sendmail user@example.com < /tmp/email.txt```
+        2. Using "mail" command: ```mail -s "Subject here" user@example.com < /dev/null```
+        3. Using "telnet" command: ``` telnet localhost smtp```
+
 * Write a ``` get_prim ``` method in python/perl/bash/pseudo.
+
+        idk
+
 * Find all files which have been accessed within the last 30 days.
+
+        fint /* -type f -atime -30
+
 * Explain the following command ``` (date ; ps -ef | awk '{print $1}' | sort | uniq | wc -l) >> Activity.log ```
+
+        1. Executes date command, which prints current datetime, 
+        2. Then we execute process list command and print only UID column
+        3. Then with pipe we sort it
+        4. print only unique values
+        5. "wc -l" is counting it number after all
+        6. writes file with the output
+
 * Write a script to list all the differences between two directories.
+
+        ```
+        #!/bin/bash
+        Dir1=$1
+        Dir2=$2
+
+        #files that are in both Dir1 and Dir2:
+        find "$Dir1/" "$Dir2/" -printf '%P\n' | sort | uniq -d
+
+        #files that are in Dir1 but not in Dir2:
+        find "$Dir1/" "$Dir2/" "$Dir2/" -printf '%P\n' | sort | uniq -u
+
+        #files that are in Dir2 but not in Dir1:
+        find "$Dir1/" "$Dir1/" "$Dir2/" -printf '%P\n | sort | uniq -u
+
+        ```
+  
 * In a log file with contents as ``` <TIME> : [MESSAGE] : [ERROR_NO] - Human readable text ``` display summary/count of specific error numbers that occurred every hour or a specific hour.
 
-
+        cat log | awk -F ":" '{print $3}'| sort -n | uniq -c
+        cat log | grep "specific hour" | awk -F ":" '{print $3}' | sort -n | uniq -c
 
 source: https://github.com/chassing/linux-sysadmin-interview-questions/blob/master/README.md
